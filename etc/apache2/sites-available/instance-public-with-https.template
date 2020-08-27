@@ -32,6 +32,8 @@
         </RequireAll>
     </LocationMatch>
 
+    ErrorDocument 502 /srv/adt/var/www/instance/502.html
+
     Include ${APACHE_CONF_DIR}/includes/${DEPLOYMENT_EXT_HOST}.include
 
 </VirtualHost>
@@ -71,6 +73,8 @@
             AuthLDAPMaxSubGroupDepth 1
         </RequireAll>
     </LocationMatch>
+
+    ErrorDocument 502 /srv/adt/var/www/instance/502.html
 
     Include ${APACHE_CONF_DIR}/includes/${DEPLOYMENT_EXT_HOST}.include
 

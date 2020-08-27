@@ -1,0 +1,29 @@
+<!doctype html>
+<meta charset="UTF-8">
+<title>Site Maintenance</title>
+<style>
+  body { text-align: center; padding: 150px; }
+  h1 { font-size: 50px; }
+  body { font: 20px Helvetica, sans-serif; color: #333; }
+  article { display: block; text-align: left; width: 650px; margin: 0 auto; }
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function(event) {
+const MSG_FR='Désolé pour le désagrément, mais nous effectuons actuellement des travaux de maintenance. Si vous en avez besoin, vous pourriez toujours <a href="mailto:support@exoplatform.com">nous contacter</a>, sinon nous serons de retour en ligne sous peu!';
+const HEADER_FR='Nous reviendrons bientôt!';
+if(navigator.language && navigator.language.toLowerCase() == "fr"){
+  document.getElementById("header").innerHTML=HEADER_FR;
+  document.getElementById("message").innerHTML=MSG_FR;
+}
+});
+</script>
+
+<article>
+    <h1 id="header">We&rsquo;ll be back soon!</h1>
+    <div>
+        <p id="message">Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always <a href="mailto:support@exoplatform.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
+        <p>&mdash; eXo ITOP Team.</p>
+    </div>
+</article>

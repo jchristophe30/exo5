@@ -10,6 +10,8 @@
 <VirtualHost *:443>
     ServerName  ${DEPLOYMENT_EXT_HOST}
     ServerAlias ${DEPLOYMENT_APACHE_VHOST_ALIAS}
+    
+    ErrorDocument 502 /srv/adt/var/www/instance/502.html
 
     RequestHeader set X-Forwarded-Proto "https"
 
