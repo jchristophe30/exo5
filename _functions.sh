@@ -1341,7 +1341,7 @@ do_deploy() {
   configurable_env_var "DEPLOYMENT_PORT_PREFIX" "80"
   configurable_env_var "DEPLOYMENT_UMASK_VALUE" "0002"
   configurable_env_var "DEPLOYMENT_SMTP_PORT" "25"
-  echo_info "deployment database type ${DEPLOYMENT_DATABASE_TYPE}"
+  echo_info "deployment database type do deploy origin ${DEPLOYMENT_DATABASE_TYPE}"
 
   if ${DEPLOYMENT_CHAT_ENABLED}; then
     if ! ${DEPLOYMENT_CHAT_EMBEDDED}; then 
