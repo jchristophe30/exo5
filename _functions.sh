@@ -263,8 +263,7 @@ initialize_product_settings() {
       configurable_env_var "DEPLOYMENT_ADDONS_TOREMOVE" ""
       # Additional command line settings to pass to the startup
       configurable_env_var "DEPLOYMENT_OPTS" ""
-      configurable_env_var "DEPLOYMENT_APPSRV_VERSION" "7.0.75" #Default version used to download additional resources like JMX lib
-      configurable_env_var "DEPLOYMENT_DATABASE_TYPE" ""
+      configurable_env_var "DEPLOYMENT_APPSRV_VERSION" "7.0.75" #Default version used to download additional resources like JMX lib      
       env_var "DEPLOYMENT_DATABASE_ENABLED" true      
       env_var "DEPLOYMENT_DATABASE_NAME" ""
       env_var "DEPLOYMENT_DATABASE_USER" ""
