@@ -418,7 +418,8 @@ initialize_product_settings() {
       env_var "SET_ENV_PRODUCT_NAME" "${PRODUCT_NAME}"
       env_var "STANDALONE_PRODUCT_NAME" "${PRODUCT_NAME}"
 
-      echo_info "initialize function ************************ ${DEPLOYMENT_DATABASE_TYPE}"
+      echo_info "initialize function ************************"
+      echo_info "$DEPLOYMENT_DATABASE_TYPE"
 
       # Validate product and load artifact details
       # Be careful, this id should be no longer than 10 (because of mysql user name limit)
