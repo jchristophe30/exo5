@@ -26,7 +26,7 @@ do_configure_datasource_file() {
   local DB_SERVER_PATCH=$2
   local WORKING_FILE_PREFIX=${FILE_TO_PATCH}-$(tolower "${DEPLOYMENT_DATABASE_TYPE}")
   configurable_env_var "DB_DRIVER" ""
-
+  echo_info "deployment database type do_configure_datasource_file ****************** ${DEPLOYMENT_DATABASE_TYPE} ..."
     # Reconfigure server.xml for Database
   if [ "${DB_SERVER_PATCH}" != "UNSET" ]; then
     # Prepare the patch
@@ -73,6 +73,7 @@ do_get_database_settings() {
     fi  
     env_var DEPLOYMENT_DATABASE_USER "${DEPLOYMENT_DATABASE_USER//./_}"
     env_var DEPLOYMENT_DATABASE_USER "${DEPLOYMENT_DATABASE_USER//-/_}"
+    echo_info "deployment database type do_get_database_settings ****************** ${DEPLOYMENT_DATABASE_TYPE} ..."
 
     env_var "DEPLOYMENT_DATABASE_HOST" "localhost"
     case "${DEPLOYMENT_DATABASE_TYPE}" in

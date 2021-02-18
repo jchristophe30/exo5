@@ -162,6 +162,7 @@ do_configure_tomcat_ldap() {
 }
 
 do_configure_tomcat_datasources() {
+  echo_info "deployment database type do_get_database_settings do_configure_tomcat_datasources****************** ${DEPLOYMENT_DATABASE_TYPE} ..."
 
   case ${DEPLOYMENT_DATABASE_TYPE} in
     MYSQL|DOCKER_MYSQL|DOCKER_MARIADB)
