@@ -264,7 +264,8 @@ initialize_product_settings() {
       # Additional command line settings to pass to the startup
       configurable_env_var "DEPLOYMENT_OPTS" ""
       configurable_env_var "DEPLOYMENT_APPSRV_VERSION" "7.0.75" #Default version used to download additional resources like JMX lib
-      env_var "DEPLOYMENT_DATABASE_ENABLED" true
+      configurable_env_var "DEPLOYMENT_DATABASE_TYPE" ""
+      env_var "DEPLOYMENT_DATABASE_ENABLED" true      
       env_var "DEPLOYMENT_DATABASE_NAME" ""
       env_var "DEPLOYMENT_DATABASE_USER" ""
       env_var "DEPLOYMENT_GATEIN_CONF_PATH" "gatein/conf/configuration.properties"

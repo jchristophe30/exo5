@@ -72,8 +72,7 @@ do_get_database_settings() {
       env_var DEPLOYMENT_DATABASE_USER "${PRODUCT_NAME}_${INSTANCE_TOKEN:0:8}"
     fi  
     env_var DEPLOYMENT_DATABASE_USER "${DEPLOYMENT_DATABASE_USER//./_}"
-    env_var DEPLOYMENT_DATABASE_USER "${DEPLOYMENT_DATABASE_USER//-/_}"
-    echo_info "deployment database type do_get_database_settings ****************** ${DEPLOYMENT_DATABASE_TYPE} ..."
+    env_var DEPLOYMENT_DATABASE_USER "${DEPLOYMENT_DATABASE_USER//-/_}"    
 
     env_var "DEPLOYMENT_DATABASE_HOST" "localhost"
     case "${DEPLOYMENT_DATABASE_TYPE}" in
