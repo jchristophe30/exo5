@@ -674,7 +674,7 @@ initialize_product_settings() {
           env_var PLF_BRANCH                    "COMPANY"
           env_var DEPLOYMENT_SERVER_SCRIPT      "bin/catalina.sh"
           env_var DEPLOYMENT_EXTENSIONS         "crash,ide,chat,newrelic"
-          env_var DEPLOYMENT_DATABASE_TYPE      "MYSQL"
+          #env_var DEPLOYMENT_DATABASE_TYPE      "MYSQL"
           env_var DEPLOYMENT_JVM_SIZE_MAX       "3g"
           env_var DEPLOYMENT_JVM_SIZE_MIN       "2g"
           env_var DEPLOYMENT_JVM_PERMSIZE_MAX   "512m"
@@ -692,7 +692,7 @@ initialize_product_settings() {
           env_var PLF_BRANCH                    "COMPANY"
           env_var DEPLOYMENT_SERVER_SCRIPT      "bin/catalina.sh"
           env_var DEPLOYMENT_EXTENSIONS         "crash,ide,chat,newrelic"
-          env_var DEPLOYMENT_DATABASE_TYPE      "MYSQL"
+          #env_var DEPLOYMENT_DATABASE_TYPE      "MYSQL"
           # Datasets remote location
           env_var DATASET_DATA_VALUES_ARCHIVE   "bckcommunity@backup.exoplatform.org:/home/bckcommunity_pro05/community-data-values-latest.tar.bz2"
           env_var DATASET_DATA_INDEX_ARCHIVE    "bckcommunity@backup.exoplatform.org:/home/bckcommunity_pro05/community-data-index-latest.tar.bz2"
