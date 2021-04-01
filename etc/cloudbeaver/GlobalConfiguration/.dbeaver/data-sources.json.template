@@ -1,0 +1,38 @@
+{
+	"folders": {},
+	"connections": {
+		"${DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER}-jdbc-1788d915294-6a52badca5f39d4a": {
+			"provider": "${DEPLOYMENT_CLOUDBEAVER_DB_PROTO}",
+			"driver": "${DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER}-jdbc",
+			"name": "${DEPLOYMENT_CLOUDBEAVER_DB_NAME}@localhost",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": true,
+			"configuration": {
+				"host": "host.docker.internal",
+				"port": "${DEPLOYMENT_DATABASE_PORT}",
+				"database": "${DEPLOYMENT_DATABASE_NAME}",
+				"url": "jdbc:${DEPLOYMENT_CLOUDBEAVER_DB_PROTO}://host.docker.internal:${DEPLOYMENT_DATABASE_PORT}/${DEPLOYMENT_DATABASE_NAME}",
+				"username": "${DEPLOYMENT_DATABASE_USER}",
+				"password": "${DEPLOYMENT_DATABASE_USER}",
+				"type": "dev",
+				"properties": {
+					"readOnly": "true"
+				},
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

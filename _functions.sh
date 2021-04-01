@@ -33,6 +33,7 @@ source "${SCRIPT_DIR}/_functions_onlyoffice.sh"
 source "${SCRIPT_DIR}/_functions_ldap.sh"
 source "${SCRIPT_DIR}/_functions_mailhog.sh"
 source "${SCRIPT_DIR}/_functions_keycloak.sh"
+source "${SCRIPT_DIR}/_functions_cloudbeaver.sh"
 source "${SCRIPT_DIR}/_functions_jitsi.sh"
 source "${SCRIPT_DIR}/_functions_sftp.sh"
 source "${SCRIPT_DIR}/_functions_cmis.sh"
@@ -308,6 +309,10 @@ initialize_product_settings() {
       configurable_env_var "DEPLOYMENT_KEYCLOAK_ENABLED" false
       configurable_env_var "DEPLOYMENT_KEYCLOAK_IMAGE" "quay.io/keycloak/keycloak"
       configurable_env_var "DEPLOYMENT_KEYCLOAK_IMAGE_VERSION" "latest"
+
+      configurable_env_var "DEPLOYMENT_CLOUDBEAVER_ENABLED" false
+      configurable_env_var "DEPLOYMENT_CLOUDBEAVER_IMAGE" "dbeaver/cloudbeaver"
+      configurable_env_var "DEPLOYMENT_CLOUDBEAVER_IMAGE_VERSION" "latest"
 
       configurable_env_var "DEPLOYMENT_JITSI_ENABLED" false
       configurable_env_var "DEPLOYMENT_JITSI_IMAGE" "exoplatform/jitsi"
@@ -991,6 +996,7 @@ initialize_product_settings() {
    do_get_ldap_settings
    do_get_mailhog_settings
    do_get_keycloak_settings
+   do_get_cloudbeaver_settings
    do_get_jitsi_settings
    do_get_sftp_settings
    do_get_database_settings
@@ -1410,6 +1416,9 @@ do_deploy() {
   # Keycloak  port
   env_var "DEPLOYMENT_KEYCLOAK_HTTP_PORT" "${DEPLOYMENT_PORT_PREFIX}98"
 
+  # Cloudbeaver  port
+  env_var "DEPLOYMENT_CLOUDBEAVER_HTTP_PORT" "${DEPLOYMENT_PORT_PREFIX}96"
+
   # Jitsi  port
   env_var "DEPLOYMENT_JITSI_CALL_HTTP_PORT" "${DEPLOYMENT_PORT_PREFIX}81"
   env_var "DEPLOYMENT_JITSI_WEB_HTTP_PORT" "${DEPLOYMENT_PORT_PREFIX}82"
@@ -1605,6 +1614,7 @@ do_start() {
   do_start_sftp
   do_start_cmis
   do_start_database
+  do_start_cloudbeaver
   do_start_es
   do_start_chat_server
 
@@ -1835,6 +1845,7 @@ do_stop() {
       do_stop_ldap
       do_stop_mailhog
       do_stop_keycloak
+      do_stop_cloudbeaver
       do_stop_jitsi
       do_stop_sftp
       do_stop_onlyoffice
@@ -1875,6 +1886,7 @@ do_undeploy() {
     do_drop_ldap_data
     do_drop_mailhog_data
     do_drop_keycloak_data
+    do_drop_cloudbeaver_data
     do_drop_jitsi_data
     do_drop_sftp_data
     do_drop_cmis_data
