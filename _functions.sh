@@ -1622,6 +1622,10 @@ do_start() {
     do_ufw_open_port ${DEPLOYMENT_DEBUG_PORT} "Debug Port" ${ADT_DEV_MODE}
   fi
 
+  if ${DEPLOYMENT_CLOUDBEAVER_ENABLED:-false} ; then
+    do_ufw_open_port ${DEPLOYMENT_CLOUDBEAVER_HTTP_PORT} "CloudBeaver HTTP Port" ${ADT_DEV_MODE}
+  fi
+
 
   # We need this variable for the setenv
   export DEPLOYMENT_CHAT_SERVER_PORT
@@ -1736,6 +1740,9 @@ do_start() {
   fi
   if ${DEPLOYMENT_DEBUG_ENABLED:-false} ; then
     echo_info "DEBUG : ${DEPLOYMENT_EXT_HOST}:${DEPLOYMENT_DEBUG_PORT}"
+  fi
+  if ${DEPLOYMENT_CLOUDBEAVER_ENABLED:-false} ; then
+    echo_info "CloudBeaver URL : http://${DEPLOYMENT_EXT_HOST}:${DEPLOYMENT_CLOUDBEAVER_HTTP_PORT}"
   fi
   if ${DEPLOYMENT_DEV_ENABLED:-false} ; then
     echo_info "DEV Mode is enabled."
@@ -1908,6 +1915,7 @@ do_undeploy() {
     do_ufw_close_port ${DEPLOYMENT_CRASH_SSH_PORT} "CRaSH SSH" ${ADT_DEV_MODE}
     # Close debug port
     [ ! -z "${DEPLOYMENT_DEBUG_PORT:-}" ] && do_ufw_close_port ${DEPLOYMENT_DEBUG_PORT} "Debug Port" ${ADT_DEV_MODE}
+    [ ! -z "${DEPLOYMENT_CLOUDBEAVER_HTTP_PORT:-}" ] && do_ufw_close_port ${DEPLOYMENT_CLOUDBEAVER_HTTP_PORT} "CloudBeaver HTTP Port" ${ADT_DEV_MODE}
     if ${DEPLOYMENT_ONLYOFFICE_DOCUMENTSERVER_ENABLED} ; then
       # close firewall port for Onlyoffice documentserver only if addon was deployed
       do_ufw_close_port ${DEPLOYMENT_ONLYOFFICE_HTTP_PORT} "OnlyOffice Documentserver HTTP" ${ADT_DEV_MODE}

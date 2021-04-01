@@ -24,11 +24,13 @@ do_get_cloudbeaver_settings() {
     DOCKER_MYSQL)
       env_var DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER "mysql"
       env_var DEPLOYMENT_CLOUDBEAVER_DB_PROTO "mysql"
+      env_var DEPLOYMENT_CLOUDBEAVER_DB_PORT "3306"
       env_var DEPLOYMENT_CLOUDBEAVER_DB_NAME "MySQL"
     ;;
     DOCKER_POSTGRES)
       env_var DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER "postgres"
       env_var DEPLOYMENT_CLOUDBEAVER_DB_PROTO "postgresql"
+      env_var DEPLOYMENT_CLOUDBEAVER_DB_PORT "5432"
       env_var DEPLOYMENT_CLOUDBEAVER_DB_NAME "PostgreSQL"
     ;;  
     *)
@@ -47,7 +49,7 @@ do_drop_cloudbeaver_data() {
   if [ "${DEPLOYMENT_CLOUDBEAVER_ENABLED}" == "true" ]; then
     echo_info "Drops Cloudbeaver container ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME} ..."
     delete_docker_container ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}
-    delete_docker_volume ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
+    sudo rm -rf /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
     echo_info "Done."
     echo_info "Cloudbeaver data dropped"
   else
@@ -76,21 +78,17 @@ do_start_cloudbeaver() {
 
   # Ensure there is no container with the same name
   delete_docker_container ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}
-  delete_docker_volume ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
-  ${DOCKER_CMD} volume create ${DEPLOYMENT_CONTAINER_NAME}_cbeaver
-  local volume_path=$(${DOCKER_CMD} volume inspect --format '{{ .Mountpoint }}' ${DEPLOYMENT_CONTAINER_NAME}_cbeaver)
+  sudo rm -rf /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
   cp -rvf ${ETC_DIR}/cloudbeaver ${DEPLOYMENT_DIR}/cloudbeaver 
   evaluate_file_content ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json.template ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json
-  sudo mv ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration ${volume_path}/GlobalConfiguration
-  local CB_LOCAL_HOST_ADDR=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
+  sudo mv ${DEPLOYMENT_DIR}/cloudbeaver /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
+  local DB_ADDR=$(${DOCKER_CMD} inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DEPLOYMENT_CONTAINER_NAME})
 
   ${DOCKER_CMD} run \
   -d \
-  -e CLOUDBEAVER_USER=root \
-  -e CLOUDBEAVER_PASSWORD=password \
   -p "${DEPLOYMENT_CLOUDBEAVER_HTTP_PORT}:8978" \
-  -v "${DEPLOYMENT_CONTAINER_NAME}_cbeaver:/opt/cloudbeaver/workspace" \
-  --add-host=host.docker.internal:${CB_LOCAL_HOST_ADDR} \
+  -v "/tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver:/opt/cloudbeaver/workspace" \
+  --add-host=host.docker.internal:${DB_ADDR} \
   --name ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME} ${DEPLOYMENT_CLOUDBEAVER_IMAGE}:${DEPLOYMENT_CLOUDBEAVER_IMAGE_VERSION}
 
   echo_info "${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME} container started"  
