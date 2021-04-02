@@ -60,7 +60,7 @@ do_start_cloudbeaver() {
   # Ensure there is no container with the same name
   delete_docker_container ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}
   sudo rm -rf /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
-  cp -rvf ${ETC_DIR}/cloudbeaver ${DEPLOYMENT_DIR}/cloudbeaver 
+  cp -rf ${ETC_DIR}/cloudbeaver ${DEPLOYMENT_DIR}/cloudbeaver 
   case ${DEPLOYMENT_DB_TYPE} in
     DOCKER_MYSQL)
       evaluate_file_content ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json.mysql.template ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json
