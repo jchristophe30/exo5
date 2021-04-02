@@ -20,25 +20,6 @@ do_get_cloudbeaver_settings() {
     return;
   fi
   env_var DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME "${INSTANCE_KEY}_Cloudbeaver"
-  case ${DEPLOYMENT_DB_TYPE} in
-    DOCKER_MYSQL)
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER "mysql"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PROTO "mysql"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PORT "3306"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_NAME "MySQL"
-    ;;
-    DOCKER_POSTGRES)
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER "postgres"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PROTO "postgresql"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_PORT "5432"
-      env_var DEPLOYMENT_CLOUDBEAVER_DB_NAME "PostgreSQL"
-    ;;  
-    *)
-      echo_error "Invalid database type \"${DEPLOYMENT_DB_TYPE}\""
-      print_usage
-      exit 1
-    ;;
-  esac  
 }
 
 #
@@ -80,7 +61,19 @@ do_start_cloudbeaver() {
   delete_docker_container ${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}
   sudo rm -rf /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
   cp -rvf ${ETC_DIR}/cloudbeaver ${DEPLOYMENT_DIR}/cloudbeaver 
-  evaluate_file_content ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json.template ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json
+  case ${DEPLOYMENT_DB_TYPE} in
+    DOCKER_MYSQL)
+      evaluate_file_content ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json.mysql.template ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json
+    ;;
+    DOCKER_POSTGRES)
+      evaluate_file_content ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json.postgres.template ${DEPLOYMENT_DIR}/cloudbeaver/GlobalConfiguration/.dbeaver/data-sources.json
+    ;;  
+    *)
+      echo_error "Invalid database type \"${DEPLOYMENT_DB_TYPE}\""
+      print_usage
+      exit 1
+    ;;
+  esac  
   sudo mv ${DEPLOYMENT_DIR}/cloudbeaver /tmp/${DEPLOYMENT_CLOUDBEAVER_CONTAINER_NAME}_cbeaver
   local DB_ADDR=$(${DOCKER_CMD} inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DEPLOYMENT_CONTAINER_NAME})
 

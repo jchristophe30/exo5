@@ -1,10 +1,10 @@
 {
 	"folders": {},
 	"connections": {
-		"${DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER}-jdbc-1788d915294-6a52badca5f39d4a": {
-			"provider": "${DEPLOYMENT_CLOUDBEAVER_DB_PROTO}",
-			"driver": "${DEPLOYMENT_CLOUDBEAVER_DB_PROVIDER}-jdbc",
-			"name": "${DEPLOYMENT_CLOUDBEAVER_DB_NAME}@localhost",
+		"mysql8-178915e4f22-56c1e13e4f213dfb": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "MySQL@Acceptance",
 			"save-password": false,
 			"show-system-objects": true,
 			"read-only": true,
@@ -12,12 +12,12 @@
 				"host": "host.docker.internal",
 				"port": "${DEPLOYMENT_CLOUDBEAVER_DB_PORT}",
 				"database": "${DEPLOYMENT_DATABASE_NAME}",
-				"url": "jdbc:${DEPLOYMENT_CLOUDBEAVER_DB_PROTO}://host.docker.internal:${DEPLOYMENT_CLOUDBEAVER_DB_PORT}/${DEPLOYMENT_DATABASE_NAME}",
+				"url": "jdbc:mysql://host.docker.internal:${DEPLOYMENT_CLOUDBEAVER_DB_PORT}/${DEPLOYMENT_DATABASE_NAME}",
 				"username": "${DEPLOYMENT_DATABASE_USER}",
 				"password": "${DEPLOYMENT_DATABASE_USER}",
 				"type": "dev",
 				"properties": {
-					"readOnly": "true"
+					"allowPublicKeyRetrieval": "true"
 				},
 				"auth-model": "native",
 				"handlers": {}
