@@ -10,9 +10,9 @@
 			"read-only": true,
 			"configuration": {
 				"host": "host.docker.internal",
-				"port": "${DEPLOYMENT_CLOUDBEAVER_DB_PORT}",
+				"port": "3306",
 				"database": "${DEPLOYMENT_DATABASE_NAME}",
-				"url": "jdbc:mysql://host.docker.internal:${DEPLOYMENT_CLOUDBEAVER_DB_PORT}/${DEPLOYMENT_DATABASE_NAME}",
+				"url": "jdbc:mysql://host.docker.internal:3306/${DEPLOYMENT_DATABASE_NAME}",
 				"username": "${DEPLOYMENT_DATABASE_USER}",
 				"password": "${DEPLOYMENT_DATABASE_USER}",
 				"type": "dev",
