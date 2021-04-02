@@ -1,4 +1,4 @@
-!SESSION 2021-04-02 06:50:46.662 -----------------------------------------------
+!SESSION 2021-04-02 10:39:39.695 -----------------------------------------------
 eclipse.buildId=unknown
 java.version=11.0.7
 java.vendor=AdoptOpenJDK
@@ -6,52 +6,14 @@ BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en
 Framework arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
 Command-line arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
 
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:50:47.653
+!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 10:39:40.592
 !MESSAGE Initialize web platform...
 
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:50:47.992
+!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 10:39:40.948
 !MESSAGE Available drivers: DB2 LUW,Firebird,H2 Embedded,Derby Server,SQLite,Trino,MS SQL Server / SQL Server,MySQL,MariaDB,Oracle,PostgreSQL
 
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:50:47.993
-!MESSAGE Web platform initialized (342ms)
-!SESSION 2021-04-02 06:51:11.163 -----------------------------------------------
-eclipse.buildId=unknown
-java.version=11.0.7
-java.vendor=AdoptOpenJDK
-BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en
-Framework arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
-Command-line arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
+!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 10:39:40.949
+!MESSAGE Web platform initialized (358ms)
 
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:51:12.074
-!MESSAGE Initialize web platform...
-
-!ENTRY org.eclipse.core.resources 2 10035 2021-04-02 06:51:12.205
-!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:51:12.387
-!MESSAGE Available drivers: DB2 LUW,Firebird,H2 Embedded,Derby Server,SQLite,Trino,MS SQL Server / SQL Server,MySQL,MariaDB,Oracle,PostgreSQL
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:51:12.388
-!MESSAGE Web platform initialized (316ms)
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 06:56:25.184
+!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 10:55:19.963
 !MESSAGE Configure CB database security
-!SESSION 2021-04-02 07:06:45.027 -----------------------------------------------
-eclipse.buildId=unknown
-java.version=11.0.7
-java.vendor=AdoptOpenJDK
-BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en
-Framework arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
-Command-line arguments:  -product io.cloudbeaver.product.ce.product -web-config conf/cloudbeaver.conf -registryMultiLanguage
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 07:06:45.960
-!MESSAGE Initialize web platform...
-
-!ENTRY org.eclipse.core.resources 2 10035 2021-04-02 07:06:46.074
-!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 07:06:46.247
-!MESSAGE Available drivers: DB2 LUW,Firebird,H2 Embedded,Derby Server,SQLite,Trino,MS SQL Server / SQL Server,MySQL,MariaDB,Oracle,PostgreSQL
-
-!ENTRY org.jkiss.dbeaver.model 1 0 2021-04-02 07:06:46.248
-!MESSAGE Web platform initialized (290ms)
