@@ -84,7 +84,9 @@ do_start_es() {
     -e ES_JAVA_OPTS="-Xms${DEPLOYMENT_ES_HEAP} -Xmx${DEPLOYMENT_ES_HEAP}" \
     -e "node.name=${INSTANCE_KEY}" \
     -e "cluster.name=${INSTANCE_KEY}" \
-    -e "xpack.monitoring.enabled=false" \
+    -e "cluster.initial_master_nodes=${INSTANCE_KEY}" \
+    -e "xpack.security.enabled=false" \
+    -e "network.host=_site_" \
     --name ${DEPLOYMENT_ES_CONTAINER_NAME} ${DEPLOYMENT_ES_IMAGE}:${DEPLOYMENT_ES_IMAGE_VERSION}
 
   echo_info "${DEPLOYMENT_ES_CONTAINER_NAME} container started"
