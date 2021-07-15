@@ -96,7 +96,7 @@ do_start_es() {
         -e "node.name=${INSTANCE_KEY}" \
         -e "cluster.name=${INSTANCE_KEY}" \
         -e "cluster.initial_master_nodes=${INSTANCE_KEY}" \
-        -e "xpack.security.enabled=false" \
+        -e "xpack.security.enabled=${DEPLOYMENT_ES_SECURITY_ENABLED:-false}" \
         -e "network.host=_site_" \
         -e "reindex.remote.whitelist=${DEPLOYMENT_ES_OLD_INTERNAL_ADDR}:9200" \
         --name ${DEPLOYMENT_ES_CONTAINER_NAME} ${DEPLOYMENT_ES_IMAGE}:${DEPLOYMENT_ES_IMAGE_VERSION}
@@ -128,6 +128,10 @@ do_start_es() {
   echo_info "${DEPLOYMENT_ES_CONTAINER_NAME} container started"
 
   check_es_availability
+
+  if ${DEPLOYMENT_ES_SECURITY_ENABLED:-false}; then 
+    do_create_user
+  fi
 }
 
 check_es_availability() {
@@ -170,6 +174,15 @@ check_es_availability() {
     exit 1
   fi
   echo_info "Elasticsearch ${DEPLOYMENT_ES_CONTAINER_NAME} up and available"
+}
+
+# Create ES User 
+do_create_user() {
+  echo_info "Creating Elasticsearch user for ${DEPLOYMENT_ES_CONTAINER_NAME}"
+  curl -XPOST "http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/acceptance" \
+  -H 'Content-Type: application/json' \
+  -d "{  \"password\" : \"${DEPLOYMENT_ES_CONTAINER_NAME}\",  \"enabled\": true,  \"roles\" : [ \"superuser\" ],  \"full_name\" : \"acceptance\",  \"email\" : \"acceptance@exoplatform.com\",  \"metadata\" : {    \"intelligence\" : 1  }}"
+  echo_info "User created."
 }
 
 # Migrate ES Embedded to Standalone 

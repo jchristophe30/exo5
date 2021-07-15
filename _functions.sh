@@ -287,6 +287,7 @@ initialize_product_settings() {
 
       configurable_env_var "DEPLOYMENT_ES_ENABLED" true
       configurable_env_var "DEPLOYMENT_ES_IMAGE" "exoplatform/elasticsearch"
+      configurable_env_var "DEPLOYMENT_ES_SECURITY_ENABLED" false 
 
       env_var "DEPLOYMENT_ONLYOFFICE_DOCUMENTSERVER_ENABLED" false
       configurable_env_var "DEPLOYMENT_ONLYOFFICE_SECRET" ""

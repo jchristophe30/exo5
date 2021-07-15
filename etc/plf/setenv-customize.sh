@@ -48,6 +48,12 @@ if ${DEPLOYMENT_ES_ENABLED}; then
     CATALINA_OPTS="${CATALINA_OPTS} -Dexo.es.search.server.url=http://127.0.0.1:${EXO_ES_HTTP_PORT}"
     CATALINA_OPTS="${CATALINA_OPTS} -Des.path.data=${CATALINA_HOME}/${EXO_ES_PATH_DATA}"
     CATALINA_OPTS="${CATALINA_OPTS} -Des.node.name=${INSTANCE_KEY}"
+    if ${DEPLOYMENT_ES_SECURITY_ENABLED:-false}; then 
+      CATALINA_OPTS="${CATALINA_OPTS} -Dexo.es.search.server.username=acceptance"
+      CATALINA_OPTS="${CATALINA_OPTS} -Dexo.es.search.server.password=${DEPLOYMENT_ES_CONTAINER_NAME}"
+      CATALINA_OPTS="${CATALINA_OPTS} -Dexo.es.index.server.username=acceptance"
+      CATALINA_OPTS="${CATALINA_OPTS} -Dexo.es.index.server.password=${DEPLOYMENT_ES_CONTAINER_NAME}"
+    fi
 fi
 # eXo Addon Chat
 if ${DEPLOYMENT_CHAT_ENABLED}; then
