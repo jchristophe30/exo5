@@ -230,7 +230,7 @@ set -x
   fi
   cat ${temp_file} 
   local result_error=$(jq -r '.error.root_cause' ${temp_file})
-  local result_created=$(jq -r '.role.created' ${temp_file})
+  local result_created=$(jq -r '.created' ${temp_file})
   if [ $result_created == "null" ]; then
     echo_error "exo user was not created nor updated sucessfully"
     echo_error "Message: $result_error"
