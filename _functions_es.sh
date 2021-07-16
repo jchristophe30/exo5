@@ -154,9 +154,12 @@ check_es_availability() {
 # Create exo ES user and role
 do_configure_es_user() {
   echo_info "Creating or updating ES exo User and Role"
+
+  local temp_file="/tmp/${DEPLOYMENT_ES_CONTAINER_NAME}_${DEPLOYMENT_ES_HTTP_PORT}.txt"
 set -x
   # exo role
-  RESULT=`curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  echo_info "Port http: ${DEPLOYMENT_ES_HTTP_PORT}"
+  curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
     "cluster": [
       "manage_index_templates",
@@ -187,20 +190,20 @@ set -x
     "transient_metadata": {
       "enabled": true
     }
-  }'`
+  }' > ${temp_file} 
   RET=$?
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
   fi
-  RESULT_ERROR=`echo $RESULT | jq '.error.root_cause'`
-  RESULT_CREATED=`echo $RESULT | jq '.role.created'`
-  if [ $RESULT_CREATED == "null" ]; then
+  local result_error=$(jq -r '.error.root_cause' ${temp_file})
+  local result_created=$(jq -r '.role.created' ${temp_file})
+  if [ $result_created == "null" ]; then
     echo_error "exo role was not created nor updated sucessfully"
-    echo_error "Message: $RESULT_ERROR"
+    echo_error "Message: $result_error"
     exit 1
   else
-    if [[ $RESULT_CREATED == "true" ]];then
+    if [[ $result_created == "true" ]];then
       echo_info "exo role created successfully"
     else
       echo_info "exo role updated successfully"
