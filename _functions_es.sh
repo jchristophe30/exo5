@@ -19,8 +19,9 @@ do_get_es_settings() {
   env_var DEPLOYMENT_ES_CONTAINER_NAME "${INSTANCE_KEY}_es"
   configurable_env_var DEPLOYMENT_ES_HEAP "512m"
   # Make this configurable :
-  env_var DEPLOYMENT_ES_SECURED_ENABLED true
+  configurable_env_var DEPLOYMENT_ES_SECURED_ENABLED true
   env_var DEPLOYMENT_ES_ELASTIC_PASSWORD "inKosHwKv2FZGAWLDvxL"
+  env_var DEPLOYMENT_ES_EXO_PASSWORD "1h6nrptc5Py7n3nAfxkO"
 }
 
 #
@@ -154,9 +155,8 @@ check_es_availability() {
 # Create exo ES user and role
 do_configure_es_user() {
   echo_info "Creating or updating ES exo User and Role"
-
   local temp_file="/tmp/${DEPLOYMENT_ES_CONTAINER_NAME}_${DEPLOYMENT_ES_HTTP_PORT}.txt"
-set -x
+
   # exo role
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
@@ -214,7 +214,7 @@ set -x
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
     "username": "exo",
-    "password" : "1h6nrptc5Py7n3nAfxkO",
+    "password" : "${DEPLOYMENT_ES_EXO_PASSWORD}",
     "roles": [
       "exo"
     ],
@@ -242,7 +242,7 @@ set -x
       echo_info "exo user updated successfully"
     fi
   fi
-  }
+}
 
 # Migrate ES Embedded to Standalone 
 do_migrate_embedded() {
