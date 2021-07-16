@@ -18,6 +18,9 @@ fi
 do_get_es_settings() {
   env_var DEPLOYMENT_ES_CONTAINER_NAME "${INSTANCE_KEY}_es"
   configurable_env_var DEPLOYMENT_ES_HEAP "512m"
+  # Make this configurable :
+  env_var DEPLOYMENT_ES_SECURED_ENABLED true
+  env_var DEPLOYMENT_ES_ELASTIC_PASSWORD "inKosHwKv2FZGAWLDvxL"
 }
 
 #
@@ -88,14 +91,19 @@ do_start_es() {
     -e ES_JAVA_OPTS="-Xms${DEPLOYMENT_ES_HEAP} -Xmx${DEPLOYMENT_ES_HEAP}" \
     -e "node.name=${INSTANCE_KEY}" \
     -e "cluster.name=${INSTANCE_KEY}" \
-    -e "cluster.initial_master_nodes=${INSTANCE_KEY}" \
-    -e "xpack.security.enabled=false" \
+    -e "discovery.type=single-node" \
+    -e "xpack.security.enabled=${DEPLOYMENT_ES_SECURED_ENABLED}" \
+    -e "xpack.security.http.ssl.enabled=false" \
+    -e "ELASTIC_PASSWORD=${DEPLOYMENT_ES_ELASTIC_PASSWORD}"
     -e "network.host=_site_" \
     --name ${DEPLOYMENT_ES_CONTAINER_NAME} ${DEPLOYMENT_ES_IMAGE}:${DEPLOYMENT_ES_IMAGE_VERSION}
 
   echo_info "${DEPLOYMENT_ES_CONTAINER_NAME} container started"
 
   check_es_availability
+  if ${DEPLOYMENT_ES_SECURED_ENABLED:-false}; then 
+    do_configure_es_user
+  fi
 }
 
 check_es_availability() {
@@ -137,6 +145,95 @@ check_es_availability() {
     exit 1
   fi
   echo_info "Elasticsearch ${DEPLOYMENT_ES_CONTAINER_NAME} up and available"
+}
+
+# Create exo ES user and role
+do_configure_es_user() {
+  echo_info "Creating or updating ES exo User and Role"
+
+  # exo role
+  RESULT=`curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  {
+    "cluster": [
+      "manage_index_templates",
+      "monitor",
+      "manage_ingest_pipelines"
+    ],
+    "indices": [
+      {
+        "names": [
+          "wiki*",
+          "news*",
+          "event*",
+          "analytics*",
+          "profile*",
+          "file*",
+          "activity*",
+          "space*"
+        ],
+        "privileges": [
+          "all"
+        ],
+        "allow_restricted_indices": false
+      }
+    ],
+    "applications": [],
+    "run_as": [],
+    "metadata": {},
+    "transient_metadata": {
+      "enabled": true
+    }
+  }'`
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    echo_error "Error in the curl command. Return code: $RET"
+    exit 1
+  fi
+  RESULT_ERROR=`echo $RESULT | jq '.error.root_cause'`
+  RESULT_CREATED=`echo $RESULT | jq '.role.created'`
+  if [ $RESULT_CREATED == "null" ]; then
+    echo_error "exo role was not created nor updated sucessfully"
+    echo_error "Message: $RESULT_ERROR"
+    exit 1
+  else
+    if [[ $RESULT_CREATED == "true" ]];then
+      echo_info "exo role created successfully"
+    else
+      echo_info "exo role updated successfully"
+    fi
+  fi
+
+  # exo user
+  RESULT=`curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  {
+    "username": "exo",
+    "password" : "1h6nrptc5Py7n3nAfxkO",
+    "roles": [
+      "exo"
+    ],
+    "full_name": "",
+    "email": "",
+    "metadata": {},
+    "enabled": true
+  }'`
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    echo_error "Error in the curl command. Return code: $RET"
+    exit 1
+  fi
+  RESULT_ERROR=`echo $RESULT | jq '.error.root_cause'`
+  RESULT_CREATED=`echo $RESULT | jq '.role.created'`
+  if [ $RESULT_CREATED == "null" ]; then
+    echo_error "exo user was not created nor updated sucessfully"
+    echo_error "Message: $RESULT_ERROR"
+    exit 1
+  else
+    if [[ $RESULT_CREATED == "true" ]];then
+      echo_info "exo user created successfully"
+    else
+      echo_info "exo role updated successfully"
+    fi
+  fi
 }
 
 # Migrate ES Embedded to Standalone 
