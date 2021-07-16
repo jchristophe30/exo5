@@ -94,7 +94,7 @@ set -x
     -e "discovery.type=single-node" \
     -e "xpack.security.enabled=${DEPLOYMENT_ES_SECURED_ENABLED}" \
     -e "xpack.security.http.ssl.enabled=false" \
-    -e "ELASTIC_PASSWORD=${DEPLOYMENT_ES_ELASTIC_PASSWORD}"
+    -e "ELASTIC_PASSWORD=${DEPLOYMENT_ES_ELASTIC_PASSWORD}" \
     -e "network.host=_site_" \
     --name ${DEPLOYMENT_ES_CONTAINER_NAME} ${DEPLOYMENT_ES_IMAGE}:${DEPLOYMENT_ES_IMAGE_VERSION}
 set +x
