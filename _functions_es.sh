@@ -83,7 +83,7 @@ do_start_es() {
 
   # Ensure there is no container with the same name
   delete_docker_container ${DEPLOYMENT_ES_CONTAINER_NAME}
-
+set -x
   ${DOCKER_CMD} run \
     -d \
     -p "127.0.0.1:${DEPLOYMENT_ES_HTTP_PORT}:9200" \
@@ -97,7 +97,7 @@ do_start_es() {
     -e "ELASTIC_PASSWORD=${DEPLOYMENT_ES_ELASTIC_PASSWORD}"
     -e "network.host=_site_" \
     --name ${DEPLOYMENT_ES_CONTAINER_NAME} ${DEPLOYMENT_ES_IMAGE}:${DEPLOYMENT_ES_IMAGE_VERSION}
-
+set +x
   echo_info "${DEPLOYMENT_ES_CONTAINER_NAME} container started"
 
   check_es_availability
