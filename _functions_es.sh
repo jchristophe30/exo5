@@ -196,6 +196,7 @@ EOF
 
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
   RET=$?
+  rm ${temp_json}
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
@@ -213,7 +214,7 @@ EOF
       echo_info "exo role updated successfully"
     fi
   fi
-set -x
+
   # exo user
   cat << EOF > ${temp_json}
   {
@@ -228,11 +229,10 @@ set -x
     "enabled": true
   }
 EOF
-  cat ${temp_json}
 
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
-set +x
   RET=$?
+  rm ${temp_json}
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
