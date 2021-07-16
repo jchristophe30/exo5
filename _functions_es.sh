@@ -191,7 +191,7 @@ do_configure_es_user() {
       "enabled": true
     }
   }
-  EOF
+EOF
   cat ${temp_json}
 
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
@@ -227,7 +227,7 @@ set -x
     "metadata": {},
     "enabled": true
   }
-  EOF
+EOF
   cat ${temp_json}
 
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
