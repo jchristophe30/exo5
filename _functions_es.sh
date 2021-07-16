@@ -158,8 +158,7 @@ do_configure_es_user() {
   local temp_file="/tmp/${DEPLOYMENT_ES_CONTAINER_NAME}_${DEPLOYMENT_ES_HTTP_PORT}.txt"
 set -x
   # exo role
-  echo_info "Port http: ${DEPLOYMENT_ES_HTTP_PORT}"
-  curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
     "cluster": [
       "manage_index_templates",
@@ -196,6 +195,7 @@ set -x
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
   fi
+  cat ${temp_file} 
   local result_error=$(jq -r '.error.root_cause' ${temp_file})
   local result_created=$(jq -r '.role.created' ${temp_file})
   if [ $result_created == "null" ]; then
