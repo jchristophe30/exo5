@@ -156,9 +156,10 @@ check_es_availability() {
 do_configure_es_user() {
   echo_info "Creating or updating ES exo User and Role"
   local temp_file="/tmp/${DEPLOYMENT_ES_CONTAINER_NAME}_${DEPLOYMENT_ES_HTTP_PORT}.txt"
+  local temp_json="/tmp/${DEPLOYMENT_ES_CONTAINER_NAME}_${DEPLOYMENT_ES_HTTP_PORT}_json.txt"
 
   # exo role
-  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  cat << EOF > ${temp_json}
   {
     "cluster": [
       "manage_index_templates",
@@ -189,7 +190,11 @@ do_configure_es_user() {
     "transient_metadata": {
       "enabled": true
     }
-  }' > ${temp_file}
+  }
+  EOF
+  cat ${temp_json}
+
+  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
   RET=$?
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
@@ -210,10 +215,10 @@ do_configure_es_user() {
   fi
 set -x
   # exo user
-  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  cat << EOF > ${temp_json}
   {
     "username": "exo",
-    "password" : "1h6nrptc5Py7n3nAfxkO",
+    "password" : "${DEPLOYMENT_ES_EXO_PASSWORD}",
     "roles": [
       "exo"
     ],
@@ -221,7 +226,11 @@ set -x
     "email": "",
     "metadata": {},
     "enabled": true
-  }'  > ${temp_file} 
+  }
+  EOF
+  cat ${temp_json}
+
+  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
 set +x
   RET=$?
   if [ $RET -ne 0 ]; then
