@@ -213,7 +213,7 @@ set -x
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
     "username": "exo",
-    "password" : "${DEPLOYMENT_ES_EXO_PASSWORD}",
+    "password" : "1h6nrptc5Py7n3nAfxkO",
     "roles": [
       "exo"
     ],
