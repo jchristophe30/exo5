@@ -119,12 +119,18 @@ check_es_availability() {
     count=$(( $count + 1 ))
     set +e
 
-    curl -s -q --max-time ${wait_time} http://localhost:${DEPLOYMENT_ES_HTTP_PORT} > ${temp_file}
+    if ${DEPLOYMENT_ES_SECURED_ENABLED:-false}; then 
+      CURL_COMMAND="curl -s -q --max-time ${wait_time} -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD}"
+    else
+      CURL_COMMAND="curl -s -q --max-time ${wait_time}"
+    fi
+
+    ${CURL_COMMAND} http://localhost:${DEPLOYMENT_ES_HTTP_PORT}
     RET=$?
     if [ $RET -ne 0 ]; then
       [ $(( ${count} % 10 )) -eq 0 ] && echo_info "Elasticsearch not yet available (${count} / ${try})..."
     else
-      curl -f -s --max-time ${wait_time} http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_cluster/health > ${temp_file} 
+      ${CURL_COMMAND} http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_cluster/health > ${temp_file} 
       local status=$(jq -r '.status' ${temp_file})
       if [ "${status}" == "green" ]; then
         RET=0
