@@ -211,7 +211,7 @@ set -x
   fi
 
   # exo user
-  RESULT=`curl -s -q  -XPOST 'http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo' -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
+  curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
     "username": "exo",
     "password" : "1h6nrptc5Py7n3nAfxkO",
@@ -222,26 +222,27 @@ set -x
     "email": "",
     "metadata": {},
     "enabled": true
-  }'`
+  }'  > ${temp_file} 
   RET=$?
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
   fi
-  RESULT_ERROR=`echo $RESULT | jq '.error.root_cause'`
-  RESULT_CREATED=`echo $RESULT | jq '.role.created'`
-  if [ $RESULT_CREATED == "null" ]; then
+  cat ${temp_file} 
+  local result_error=$(jq -r '.error.root_cause' ${temp_file})
+  local result_created=$(jq -r '.role.created' ${temp_file})
+  if [ $result_created == "null" ]; then
     echo_error "exo user was not created nor updated sucessfully"
-    echo_error "Message: $RESULT_ERROR"
+    echo_error "Message: $result_error"
     exit 1
   else
-    if [[ $RESULT_CREATED == "true" ]];then
+    if [[ $result_created == "true" ]];then
       echo_info "exo user created successfully"
     else
-      echo_info "exo role updated successfully"
+      echo_info "exo user updated successfully"
     fi
   fi
-}
+  }
 
 # Migrate ES Embedded to Standalone 
 do_migrate_embedded() {
