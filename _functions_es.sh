@@ -192,7 +192,6 @@ do_configure_es_user() {
     }
   }
 EOF
-  cat ${temp_json}
 
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/role/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d @${temp_json} > ${temp_file}
   RET=$?
