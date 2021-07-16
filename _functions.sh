@@ -181,6 +181,7 @@ Environment Variables
   DEPLOYMENT_CMIS_USERS_PASSWORD    : Which password to use for the cmis users (by default, use the cmis image default)
 
   DEPLOYMENT_SFTP_ENABLED           : Do you need to configure exo-lecko addon
+  DEPLOYMENT_ES_EMBEDDED_MIGRATION_ENABLED  : Enable elastic serach migration from embedded to standalone
 
 EOF
 }
@@ -877,7 +878,7 @@ initialize_product_settings() {
               
               # TO DO Once onlyoffice/documentserver-ie:6.1 is released, switch to that image and use a fixed version
               configurable_env_var "DEPLOYMENT_ONLYOFFICE_IMAGE" "onlyoffice/documentserver"
-              configurable_env_var "DEPLOYMENT_ONLYOFFICE_IMAGE_VERSION" "6.2" # Default version for Only Office docker image to use
+              configurable_env_var "DEPLOYMENT_ONLYOFFICE_IMAGE_VERSION" "6.3" # Default version for Only Office docker image to use
           elif [[ "${PRODUCT_VERSION}" =~ ^(6.1) ]]; then
               env_var "DEPLOYMENT_ES_IMAGE_VERSION" "1.2.2"
               env_var "DEPLOYMENT_CHAT_MONGODB_VERSION" "4.0"
@@ -1777,6 +1778,9 @@ do_start() {
     echo_info "DEV Mode is enabled."
   fi
 
+  if ${DEPLOYMENT_ES_EMBEDDED_MIGRATION_ENABLED:-false}; then
+    echo_info "Elasticsearch Embedded to Standalone migration is successfully done. Please remove DEPLOYMENT_ES_EMBEDDED_MIGRATION_ENABLED property!"
+  fi
 
   )
 }
