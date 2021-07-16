@@ -189,13 +189,12 @@ do_configure_es_user() {
     "transient_metadata": {
       "enabled": true
     }
-  }' > ${temp_file} 
+  }' > ${temp_file}
   RET=$?
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
   fi
-  cat ${temp_file} 
   local result_error=$(jq -r '.error.root_cause' ${temp_file})
   local result_created=$(jq -r '.role.created' ${temp_file})
   if [ $result_created == "null" ]; then
@@ -209,7 +208,7 @@ do_configure_es_user() {
       echo_info "exo role updated successfully"
     fi
   fi
-
+set -x
   # exo user
   curl -s -q  -XPOST http://localhost:${DEPLOYMENT_ES_HTTP_PORT}/_security/user/exo -u elastic:${DEPLOYMENT_ES_ELASTIC_PASSWORD} -H 'Content-Type: application/json' -d'
   {
@@ -223,12 +222,12 @@ do_configure_es_user() {
     "metadata": {},
     "enabled": true
   }'  > ${temp_file} 
+set +x
   RET=$?
   if [ $RET -ne 0 ]; then
     echo_error "Error in the curl command. Return code: $RET"
     exit 1
   fi
-  cat ${temp_file} 
   local result_error=$(jq -r '.error.root_cause' ${temp_file})
   local result_created=$(jq -r '.created' ${temp_file})
   if [ $result_created == "null" ]; then
